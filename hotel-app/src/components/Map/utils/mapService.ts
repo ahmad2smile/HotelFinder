@@ -1,4 +1,4 @@
-import { MapLocation } from "../../../models/MapLocation";
+import { MapLocation } from "shared";
 
 const HERE = (window as any).H;
 console.log("TCL: process.env.HERE_API_KEY", process.env.REACT_APP_API_KEY);

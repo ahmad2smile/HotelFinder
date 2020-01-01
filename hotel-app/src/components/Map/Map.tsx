@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { getMap, createUI, behavior, handleResize, focusOnLocation } from "./utils/mapService";
-import { MapLocation } from "../../models/MapLocation";
+import { MapLocation } from "shared";
 
 const Map = () => {
 	const mapElementRef = useRef<HTMLDivElement>(null);
