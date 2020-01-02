@@ -9,13 +9,18 @@ const Map = () => {
 	const mapElementRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
+		let map: any;
+
 		if (mapElementRef.current) {
-			initMap(mapElementRef.current);
+			map = initMap(mapElementRef.current);
 
 			window.addEventListener("resize", handleResize);
 		}
 
-		return () => window.removeEventListener("resize", handleResize);
+		return () => {
+			window.removeEventListener("resize", handleResize);
+			map.dispose();
+		};
 	}, []);
 
 	return (

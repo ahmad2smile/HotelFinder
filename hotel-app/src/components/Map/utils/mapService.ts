@@ -21,6 +21,8 @@ export const initMap = (mapElement: HTMLElement) => {
 
 	createBehavior();
 	createUI();
+
+	return map;
 };
 
 export const setZoom = (zoom: number) => map.setZoom(zoom, true);
@@ -80,35 +82,30 @@ export const updateIcon = async (mapLocation: MapLocation, icon: string) => {
 	const activeIcon = new HERE.map.Icon(icon, { size: { w: 60, h: 60 } });
 	const inActiveIcon = new HERE.map.Icon(icon, { size: { w: 30, h: 30 } });
 
-	try {
-		if (previousIconLocations.length) {
-			await Promise.all(
-				previousIconLocations.map(l => setIcon(l, inActiveIcon))
-			);
-			previousIconLocations = [];
-		}
-
-		await setIcon(mapLocation, activeIcon);
-	} catch (error) {
-		console.log("Update Failed", error);
+	if (previousIconLocations.length) {
+		await Promise.all(
+			previousIconLocations.map(l => setIcon(l, inActiveIcon))
+		);
+		previousIconLocations = [];
 	}
+
+	await setIcon(mapLocation, activeIcon);
 
 	previousIconLocations.push(mapLocation);
 };
 
 const setIcon = (mapLocation: MapLocation, icon: any): Promise<any> => {
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve, _reject) => {
 		try {
 			const cordsAt = map
-				.setCenter(mapLocation, true)
+				.setZoom(HOTEL_ICON_ZOOM, false)
+				.setCenter(mapLocation, false)
 				.geoToScreen(mapLocation);
 
 			map.getObjectAt(cordsAt.x, cordsAt.y, (object: any) => {
 				if (!object) {
-					return reject(
-						new Error(
-							`Object at lat: ${mapLocation.lat} and lng: ${mapLocation.lng} not found`
-						)
+					return console.log(
+						`Object at lat: ${mapLocation.lat} and lng: ${mapLocation.lng} not found`
 					);
 				}
 
@@ -117,7 +114,10 @@ const setIcon = (mapLocation: MapLocation, icon: any): Promise<any> => {
 				resolve();
 			});
 		} catch (error) {
-			reject(error);
+			console.log(
+				`Object at lat: ${mapLocation.lat} and lng: ${mapLocation.lng} not found`,
+				error
+			);
 		}
 	});
 };
