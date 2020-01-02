@@ -23,7 +23,7 @@ export const initMap = (mapElement: HTMLElement) => {
 	createUI();
 };
 
-export const setZoom = (zoom: number) => map.setZoom(zoom);
+export const setZoom = (zoom: number) => map.setZoom(zoom, true);
 
 export const createBehavior = () =>
 	new HERE.mapevents.Behavior(new HERE.mapevents.MapEvents(map));
@@ -38,8 +38,9 @@ export const focusOnLocation = (location: MapLocation) => {
 
 export const addIconMarker = (icon: string, mapLocations: MapLocation[]) => {
 	const hereIcon = new HERE.map.Icon(icon);
+
 	const markers = mapLocations.map(
-		l =>
+		(l: MapLocation, index: number) =>
 			new HERE.map.Marker(l, {
 				icon: hereIcon,
 				min: HOTEL_ICON_ZOOM,
@@ -71,4 +72,52 @@ const startClustering = (data: MapLocation[]) => {
 	var clusteringLayer = new HERE.map.layer.ObjectLayer(clusteredDataProvider);
 
 	map.addLayer(clusteringLayer);
+};
+
+let previousIconLocations: MapLocation[] = [];
+
+export const updateIcon = async (mapLocation: MapLocation, icon: string) => {
+	const activeIcon = new HERE.map.Icon(icon, { size: { w: 60, h: 60 } });
+	const inActiveIcon = new HERE.map.Icon(icon, { size: { w: 30, h: 30 } });
+
+	try {
+		if (previousIconLocations.length) {
+			await Promise.all(
+				previousIconLocations.map(l => setIcon(l, inActiveIcon))
+			);
+			previousIconLocations = [];
+		}
+
+		await setIcon(mapLocation, activeIcon);
+	} catch (error) {
+		console.log("Update Failed", error);
+	}
+
+	previousIconLocations.push(mapLocation);
+};
+
+const setIcon = (mapLocation: MapLocation, icon: any): Promise<any> => {
+	return new Promise((resolve, reject) => {
+		try {
+			const cordsAt = map
+				.setCenter(mapLocation, true)
+				.geoToScreen(mapLocation);
+
+			map.getObjectAt(cordsAt.x, cordsAt.y, (object: any) => {
+				if (!object) {
+					return reject(
+						new Error(
+							`Object at lat: ${mapLocation.lat} and lng: ${mapLocation.lng} not found`
+						)
+					);
+				}
+
+				object.setIcon(icon);
+
+				resolve();
+			});
+		} catch (error) {
+			reject(error);
+		}
+	});
 };

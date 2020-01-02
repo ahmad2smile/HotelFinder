@@ -7,6 +7,6 @@ export const useStyles = createUseStyles({
 		overflow: "scroll"
 	},
 	list: {
-		overflowX: "hidden"
+		overflow: "hidden"
 	}
 });

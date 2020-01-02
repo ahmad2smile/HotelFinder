@@ -1,4 +1,8 @@
 import { createUseStyles } from "react-jss";
+import { IProps } from "../HotelCard";
+
+const boxShadow =
+	"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)";
 
 export const useStyles = createUseStyles({
 	container: {
@@ -7,14 +11,16 @@ export const useStyles = createUseStyles({
 		transition: "transform .2s",
 		borderTop: "1px solid rgba(0, 0, 0, 0.2)",
 		borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
-		zIndex: 0,
+		zIndex: ({ isActive }: IProps) => (isActive ? 10 : 0),
+		boxShadow: ({ isActive }: IProps) => (isActive ? boxShadow : "none"),
+		transform: ({ isActive }: IProps) =>
+			isActive ? "scale(1.05)" : "scale(1)",
 		backgroundColor: "#fff",
 		"&:hover": {
 			border: "none",
 			zIndex: 10,
 			transform: "scale(1.05)",
-			boxShadow:
-				"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
+			boxShadow
 		}
 	},
 	header: {

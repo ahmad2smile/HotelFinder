@@ -7,6 +7,7 @@ import { getHotels } from "../../../services/dataService";
 import {
 	addIconMarker,
 	focusOnLocation,
+	updateIcon,
 	setZoom
 } from "../../../components/Map/utils/mapService";
 
@@ -17,6 +18,7 @@ import { useStyles } from "./styles";
 const Hotels = () => {
 	const classes = useStyles();
 	const [hotels, setHotels] = useState<Hotel[]>([]);
+	const [activeHotel, setActiveHotel] = useState<Hotel>();
 	const [error, setError] = useState<string>("");
 
 	const addHotelsMarkers = (_hotels: Hotel[]) => {
@@ -25,6 +27,10 @@ const Hotels = () => {
 			_hotels.map(h => h.location)
 		);
 	};
+
+	useEffect(() => {
+		activeHotel && updateIcon(activeHotel.location, HotelIconStr);
+	}, [activeHotel]);
 
 	useEffect(() => {
 		const firstHotelResult = hotels[0];
@@ -51,7 +57,12 @@ const Hotels = () => {
 		<div className={classes.container}>
 			<div className={classes.list}>
 				{hotels.map(h => (
-					<HotelCard hotel={h} key={h.id}></HotelCard>
+					<HotelCard
+						key={h.id}
+						hotel={h}
+						isActive={h.id === activeHotel?.id}
+						onClick={setActiveHotel}
+					></HotelCard>
 				))}
 			</div>
 		</div>

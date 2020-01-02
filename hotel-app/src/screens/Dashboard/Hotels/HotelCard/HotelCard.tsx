@@ -6,15 +6,22 @@ import CallIcon from "../../../../components/Icons/CallIcon";
 import { useStyles } from "./styles";
 import WebsiteIcon from "../../../../components/Icons/WebsiteIcon";
 
-interface IProps {
+export interface IProps {
 	hotel: Hotel;
+	isActive: Boolean;
+	onClick: (hotel: Hotel) => any;
 }
 
-const HotelCard = ({ hotel }: IProps) => {
-	const classes = useStyles();
+const HotelCard = (props: IProps) => {
+	const { hotel, onClick } = props;
+	const classes = useStyles(props);
+
+	const handleClick = () => {
+		onClick(hotel);
+	};
 
 	return (
-		<div className={classes.container}>
+		<div onClick={handleClick} className={classes.container}>
 			<div className={classes.header}>
 				<img
 					src={hotel.icon}
