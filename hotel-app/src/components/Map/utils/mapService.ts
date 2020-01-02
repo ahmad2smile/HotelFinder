@@ -26,8 +26,7 @@ export const setZoom = (zoom: number) => map.setZoom(zoom);
 export const createBehavior = () =>
 	new HERE.mapevents.Behavior(new HERE.mapevents.MapEvents(map));
 
-export const createUI = () => () =>
-	HERE.ui.UI.createDefault(map, defaultLayers);
+export const createUI = () => HERE.ui.UI.createDefault(map, defaultLayers);
 
 export const handleResize = () => map.getViewPort().resize();
 
@@ -35,10 +34,13 @@ export const focusOnLocation = (location: MapLocation) => {
 	map.setCenter(location);
 };
 
-export const addIconMarker = (icon: string, mapLocation: MapLocation) => {
+export const addIconMarker = (icon: string, mapLocations: MapLocation[]) => {
 	const hereIcon = new HERE.map.Icon(icon);
+	const markers = mapLocations.map(
+		l => new HERE.map.Marker(l, { icon: hereIcon })
+	);
+	const markerGroup = new HERE.map.Group();
 
-	const marker = new HERE.map.Marker(mapLocation, { icon: hereIcon });
-
-	map.addObject(marker);
+	markerGroup.addObjects(markers);
+	map.addObject(markerGroup);
 };

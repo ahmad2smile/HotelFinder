@@ -20,14 +20,18 @@ const Hotels = () => {
 	const [error, setError] = useState<string>("");
 
 	const addHotelsMarkers = (_hotels: Hotel[]) => {
-		_hotels.forEach(h => addIconMarker(HotelIconStr, h.location));
+		addIconMarker(
+			HotelIconStr,
+			_hotels.map(h => h.location)
+		);
 	};
 
 	useEffect(() => {
-		addHotelsMarkers(hotels);
 		const firstHotelResult = hotels[0];
 
 		if (firstHotelResult) {
+			addHotelsMarkers(hotels);
+
 			focusOnLocation(firstHotelResult.location);
 			setZoom(18);
 		}
