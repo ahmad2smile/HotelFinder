@@ -1,28 +1,44 @@
 import { MapLocation } from "shared";
 
 const HERE = (window as any).H;
-console.log("TCL: process.env.HERE_API_KEY", process.env.REACT_APP_API_KEY);
 
 const platform = new HERE.service.Platform({
-	apikey: process.env.REACT_APP_API_KEY,
+	apikey: process.env.REACT_APP_API_KEY
 });
 
 const defaultLayers = platform.createDefaultLayers();
 
-export const getMap = (mapElement: HTMLElement) => {
-	return new HERE.Map(mapElement, defaultLayers.vector.normal.map, {
+let map: any;
+
+export const initMap = (mapElement: HTMLElement) => {
+	map = new HERE.Map(mapElement, defaultLayers.vector.normal.map, {
 		center: { lat: 50, lng: 5 },
 		zoom: 4,
-		pixelRatio: window.devicePixelRatio || 1,
+		pixelRatio: window.devicePixelRatio || 1
 	});
+
+	createBehavior();
+	createUI();
 };
 
-export const behavior = (map: any) => new HERE.mapevents.Behavior(new HERE.mapevents.MapEvents(map));
+export const setZoom = (zoom: number) => map.setZoom(zoom);
 
-export const createUI = (map: any) => () => HERE.ui.UI.createDefault(map, defaultLayers);
+export const createBehavior = () =>
+	new HERE.mapevents.Behavior(new HERE.mapevents.MapEvents(map));
 
-export const handleResize = (map: any) => map.getViewPort().resize();
+export const createUI = () => () =>
+	HERE.ui.UI.createDefault(map, defaultLayers);
 
-export const focusOnLocation = (map: any, location: MapLocation) => {
+export const handleResize = () => map.getViewPort().resize();
+
+export const focusOnLocation = (location: MapLocation) => {
 	map.setCenter(location);
+};
+
+export const addIconMarker = (icon: string, mapLocation: MapLocation) => {
+	const hereIcon = new HERE.map.Icon(icon);
+
+	const marker = new HERE.map.Marker(mapLocation, { icon: hereIcon });
+
+	map.addObject(marker);
 };

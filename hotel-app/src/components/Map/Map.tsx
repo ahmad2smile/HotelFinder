@@ -1,31 +1,26 @@
 import React, { useRef, useEffect } from "react";
-import { getMap, createUI, behavior, handleResize, focusOnLocation } from "./utils/mapService";
-import { MapLocation } from "shared";
+
+import { initMap, handleResize } from "./utils/mapService";
+
+import { useStyles } from "./styles";
 
 const Map = () => {
+	const classes = useStyles();
 	const mapElementRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		let map: any;
-
 		if (mapElementRef.current) {
-			map = getMap(mapElementRef.current);
-			behavior(map);
-			createUI(map);
+			initMap(mapElementRef.current);
 
-			const location: MapLocation = { lat: 52.5159, lng: 13.3777 };
-			focusOnLocation(map, location);
-
-			window.addEventListener("resize", handleResize(map));
+			window.addEventListener("resize", handleResize);
 		}
 
-		return () => window.removeEventListener("resize", handleResize(map));
+		return () => window.removeEventListener("resize", handleResize);
 	}, []);
 
 	return (
-		<div>
-			Map
-			<div style={{ height: "70vh" }} ref={mapElementRef}></div>
+		<div className={classes.container}>
+			<div ref={mapElementRef} className={classes.map}></div>
 		</div>
 	);
 };
