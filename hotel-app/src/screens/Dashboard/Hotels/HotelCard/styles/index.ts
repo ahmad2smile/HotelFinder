@@ -25,7 +25,8 @@ export const useStyles = createUseStyles({
 		width: 40
 	},
 	title: {
-		fontWeight: 501
+		fontWeight: 501,
+		maxWidth: "80%"
 	},
 	contacts: {
 		display: "flex",

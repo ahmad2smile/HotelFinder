@@ -1,5 +1,9 @@
 import { MapLocation } from "shared";
 
+const HOTEL_ICON_ZOOM = 18;
+
+let map: any;
+
 const HERE = (window as any).H;
 
 const platform = new HERE.service.Platform({
@@ -7,8 +11,6 @@ const platform = new HERE.service.Platform({
 });
 
 const defaultLayers = platform.createDefaultLayers();
-
-let map: any;
 
 export const initMap = (mapElement: HTMLElement) => {
 	map = new HERE.Map(mapElement, defaultLayers.vector.normal.map, {
@@ -37,10 +39,36 @@ export const focusOnLocation = (location: MapLocation) => {
 export const addIconMarker = (icon: string, mapLocations: MapLocation[]) => {
 	const hereIcon = new HERE.map.Icon(icon);
 	const markers = mapLocations.map(
-		l => new HERE.map.Marker(l, { icon: hereIcon })
+		l =>
+			new HERE.map.Marker(l, {
+				icon: hereIcon,
+				min: HOTEL_ICON_ZOOM,
+				max: 30
+			})
 	);
 	const markerGroup = new HERE.map.Group();
 
 	markerGroup.addObjects(markers);
 	map.addObject(markerGroup);
+
+	startClustering(mapLocations);
+};
+
+const startClustering = (data: MapLocation[]) => {
+	var dataPoints = data.map(item => {
+		return new HERE.clustering.DataPoint(item.lat, item.lng);
+	});
+
+	var clusteredDataProvider = new HERE.clustering.Provider(dataPoints, {
+		min: 0,
+		max: HOTEL_ICON_ZOOM - 1,
+		clusteringOptions: {
+			eps: 32,
+			minWeight: 2
+		}
+	});
+
+	var clusteringLayer = new HERE.map.layer.ObjectLayer(clusteredDataProvider);
+
+	map.addLayer(clusteringLayer);
 };
