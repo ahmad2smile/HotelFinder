@@ -14,6 +14,7 @@ import {
 import HotelCard from "./HotelCard/HotelCard";
 
 import { useStyles } from "./styles";
+import Search from "./Search/Search";
 
 interface IProps {
 	currentLocation: MapLocation;
@@ -21,6 +22,7 @@ interface IProps {
 
 const Hotels = ({ currentLocation }: IProps) => {
 	const classes = useStyles();
+	const [search, setSearch] = useState("");
 	const [hotels, setHotels] = useState<Hotel[]>([]);
 	const [activeHotel, setActiveHotel] = useState<Hotel>();
 	const [error, setError] = useState<string>("");
@@ -48,15 +50,16 @@ const Hotels = ({ currentLocation }: IProps) => {
 	}, [hotels]);
 
 	useEffect(() => {
-		getHotels(currentLocation)
+		getHotels(currentLocation, search)
 			.then(setHotels)
 			.catch(err => setError(err.message));
-	}, [currentLocation]);
+	}, [currentLocation, search]);
 
 	return error ? (
 		<div>{error}</div>
 	) : (
 		<div className={classes.container}>
+			<Search onChange={setSearch} />
 			<div className={classes.list}>
 				{hotels.map(h => (
 					<HotelCard

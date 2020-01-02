@@ -9,7 +9,7 @@ import { useGeoLocation } from "./utils/geoLocationHook";
 
 const Dashboard = () => {
 	const classes = useStyles();
-	const { geoLocation, error } = useGeoLocation();
+	const { geoLocation } = useGeoLocation();
 
 	return (
 		<div className={classes.container}>

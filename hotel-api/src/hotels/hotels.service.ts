@@ -21,10 +21,11 @@ export class HotelsService {
 
 	_httpService: AxiosInstance;
 
-	findAll(location: MapLocation): Promise<Promise<Hotel[]>> {
+	findAll(location: MapLocation, search: string): Promise<Promise<Hotel[]>> {
 		return this._httpService
 			.get("/places/v1/browse", {
 				params: {
+					q: search,
 					at: `${location.lat},${location.lng}`
 				}
 			})
