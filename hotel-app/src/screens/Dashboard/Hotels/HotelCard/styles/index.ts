@@ -28,7 +28,7 @@ export const useStyles = createUseStyles({
 		margin: "10px 0"
 	},
 	icon: {
-		width: 40
+		width: 55
 	},
 	title: {
 		fontWeight: 501,

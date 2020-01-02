@@ -15,7 +15,11 @@ import HotelCard from "./HotelCard/HotelCard";
 
 import { useStyles } from "./styles";
 
-const Hotels = () => {
+interface IProps {
+	currentLocation: MapLocation;
+}
+
+const Hotels = ({ currentLocation }: IProps) => {
 	const classes = useStyles();
 	const [hotels, setHotels] = useState<Hotel[]>([]);
 	const [activeHotel, setActiveHotel] = useState<Hotel>();
@@ -44,12 +48,10 @@ const Hotels = () => {
 	}, [hotels]);
 
 	useEffect(() => {
-		const mapCenter: MapLocation = { lat: 52.53075, lng: 13.3851 };
-
-		getHotels(mapCenter)
+		getHotels(currentLocation)
 			.then(setHotels)
 			.catch(err => setError(err.message));
-	}, []);
+	}, [currentLocation]);
 
 	return error ? (
 		<div>{error}</div>

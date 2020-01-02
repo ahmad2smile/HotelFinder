@@ -1,18 +1,27 @@
 import React, { useRef, useEffect } from "react";
+import { MapLocation } from "shared";
 
-import { initMap, handleResize } from "./utils/mapService";
+import { initMap, handleResize, setCenter } from "./utils/mapService";
 
 import { useStyles } from "./styles";
 
-const Map = () => {
+interface IProps {
+	currentLocation: MapLocation;
+}
+
+const Map = ({ currentLocation }: IProps) => {
 	const classes = useStyles();
 	const mapElementRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		setCenter(currentLocation);
+	}, [currentLocation]);
 
 	useEffect(() => {
 		let map: any;
 
 		if (mapElementRef.current) {
-			map = initMap(mapElementRef.current);
+			map = initMap(mapElementRef.current, currentLocation);
 
 			window.addEventListener("resize", handleResize);
 		}

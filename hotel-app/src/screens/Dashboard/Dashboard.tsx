@@ -5,14 +5,16 @@ import Map from "../../components/Map/Map";
 import Hotels from "./Hotels/Hotels";
 
 import { useStyles } from "./styles";
+import { useGeoLocation } from "./utils/geoLocationHook";
 
 const Dashboard = () => {
 	const classes = useStyles();
+	const { geoLocation, error } = useGeoLocation();
 
 	return (
 		<div className={classes.container}>
-			<Hotels></Hotels>
-			<Map></Map>
+			<Hotels currentLocation={geoLocation}></Hotels>
+			<Map currentLocation={geoLocation}></Map>
 		</div>
 	);
 };

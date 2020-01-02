@@ -12,9 +12,12 @@ const platform = new HERE.service.Platform({
 
 const defaultLayers = platform.createDefaultLayers();
 
-export const initMap = (mapElement: HTMLElement) => {
+export const initMap = (
+	mapElement: HTMLElement,
+	currentLocation: MapLocation
+) => {
 	map = new HERE.Map(mapElement, defaultLayers.vector.normal.map, {
-		center: { lat: 50, lng: 5 },
+		center: currentLocation,
 		zoom: 4,
 		pixelRatio: window.devicePixelRatio || 1
 	});
@@ -121,3 +124,6 @@ const setIcon = (mapLocation: MapLocation, icon: any): Promise<any> => {
 		}
 	});
 };
+
+export const setCenter = (mapLocation: MapLocation) =>
+	map?.setCenter(mapLocation, true);
