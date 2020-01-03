@@ -8,9 +8,9 @@ build-shared:
 	cd shared && npm i && npm run build
 build-app:
 	cd hotel-app && npm i && npm run build
-clean-client:
-	rm -rf hotel-api/client/*
-move-app-contents: clean-client
-	cp -r hotel-app/build/* hotel-api/client/
+clean-public:
+	rm -rf hotel-api/public/ && mkdir hotel-api/public/
+move-app-contents: clean-public
+	cp -r hotel-app/build/* hotel-api/public/
 build: build-app move-app-contents
 	cd hotel-api && npm i && npm run build
