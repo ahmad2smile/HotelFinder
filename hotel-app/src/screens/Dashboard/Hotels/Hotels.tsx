@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Hotel, MapLocation } from "shared";
 
 import { HotelIconStr } from "../../../components/Icons/HotelIcon";
+import HotelCard from "../../../components/HotelCard/HotelCard";
 
 import { getHotels } from "../../../services/dataService";
 import {
@@ -11,10 +12,11 @@ import {
 	setZoom
 } from "../../../components/Map/utils/mapService";
 
-import HotelCard from "./HotelCard/HotelCard";
+import Search from "./Search/Search";
 
 import { useStyles } from "./styles";
-import Search from "./Search/Search";
+import ResponsiveComponent from "../../../components/ResponsiveComponent/ResponsiveComponent";
+import Loader from "../../../components/Loader/Loader";
 
 interface IProps {
 	currentLocation: MapLocation;
@@ -55,20 +57,31 @@ const Hotels = ({ currentLocation }: IProps) => {
 			.catch(err => setError(err.message));
 	}, [currentLocation, search]);
 
-	return error ? (
-		<div>{error}</div>
-	) : (
+	return (
 		<div className={classes.container}>
 			<Search onChange={setSearch} />
 			<div className={classes.list}>
-				{hotels.map(h => (
-					<HotelCard
-						key={h.id}
-						hotel={h}
-						isActive={h.id === activeHotel?.id}
-						onClick={setActiveHotel}
-					></HotelCard>
-				))}
+				{hotels.length ? (
+					hotels.map(h => (
+						<ResponsiveComponent
+							key={h.id}
+							mobile={<HotelCard hotel={h} />}
+							desktop={
+								<div className={classes.item}>
+									<HotelCard
+										hotel={h}
+										isActive={h.id === activeHotel?.id}
+										onClick={setActiveHotel}
+									/>
+								</div>
+							}
+						/>
+					))
+				) : error ? (
+					<div>{error}</div>
+				) : (
+					<Loader />
+				)}
 			</div>
 		</div>
 	);

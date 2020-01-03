@@ -9,5 +9,9 @@ export const useStyles = createUseStyles({
 	},
 	list: {
 		overflow: "hidden"
+	},
+	item: {
+		width: "100%",
+		cursor: "pointer"
 	}
 });

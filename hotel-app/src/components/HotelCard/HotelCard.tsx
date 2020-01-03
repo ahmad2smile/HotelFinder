@@ -1,23 +1,29 @@
 import React from "react";
 import { Hotel } from "shared";
 
-import CallIcon from "../../../../components/Icons/CallIcon";
+import CallIcon from "../Icons/CallIcon";
+import WebsiteIcon from "../Icons/WebsiteIcon";
+
+import { persistHotel } from "../../services/persistanceService";
 
 import { useStyles } from "./styles";
-import WebsiteIcon from "../../../../components/Icons/WebsiteIcon";
+import { Link } from "react-router-dom";
 
 export interface IProps {
-	hotel: Hotel;
-	isActive: Boolean;
-	onClick: (hotel: Hotel) => any;
+	hotel?: Hotel;
+	extended?: Boolean;
+	isActive?: Boolean;
+	onClick?: (hotel: Hotel) => any;
 }
 
 const HotelCard = (props: IProps) => {
-	const { hotel, onClick } = props;
+	const { hotel = {} as Hotel, extended, onClick } = props;
 	const classes = useStyles(props);
 
 	const handleClick = () => {
-		onClick(hotel);
+		onClick && onClick(hotel);
+
+		persistHotel(hotel);
 	};
 
 	return (
@@ -56,6 +62,23 @@ const HotelCard = (props: IProps) => {
 					</a>
 				)}
 			</div>
+			{extended && (
+				<div className={classes.address}>
+					<p>
+						Address:{" "}
+						<p
+							dangerouslySetInnerHTML={{
+								__html: hotel.address?.text
+							}}
+						></p>
+					</p>
+				</div>
+			)}
+			{!extended && (
+				<Link to={`/hotel/?id=${hotel.id}`} className={classes.details}>
+					details>
+				</Link>
+			)}
 		</div>
 	);
 };

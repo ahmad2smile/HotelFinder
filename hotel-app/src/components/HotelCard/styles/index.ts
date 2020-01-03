@@ -1,12 +1,12 @@
 import { createUseStyles } from "react-jss";
 import { IProps } from "../HotelCard";
+import { mobileUpTo720 } from "../../../utils/responsiveHelpers";
 
 const boxShadow =
 	"0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)";
 
 export const useStyles = createUseStyles({
 	container: {
-		cursor: "pointer",
 		minHeight: 120,
 		padding: 10,
 		transition: "transform .2s",
@@ -18,10 +18,11 @@ export const useStyles = createUseStyles({
 			isActive ? "scale(1.05)" : "scale(1)",
 		backgroundColor: "#fff",
 		"&:hover": {
-			border: "none",
+			border: ({ extended }: IProps) => (extended ? "" : "none"),
 			zIndex: 10,
-			transform: "scale(1.05)",
-			boxShadow
+			transform: ({ extended }: IProps) =>
+				extended ? "none" : "scale(1.05)",
+			boxShadow: ({ extended }: IProps) => (extended ? "none" : boxShadow)
 		}
 	},
 	header: {
@@ -47,5 +48,29 @@ export const useStyles = createUseStyles({
 	openingHours: {
 		marginLeft: 10,
 		fontSize: 12
-	}
+	},
+	details: {
+		display: "block",
+		width: "100%",
+		textAlign: "right"
+	},
+	address: {},
+	...mobileUpTo720({
+		container: {
+			"&:hover": {
+				borderTop: "1px solid rgba(0, 0, 0, 0.2)",
+				borderBottom: "1px solid rgba(0, 0, 0, 0.2)",
+				zIndex: 10,
+				transform: "none",
+				boxShadow: "none"
+			}
+		},
+		address: {
+			width: "100%",
+			display: "block",
+			"& > p": {
+				display: "inline"
+			}
+		}
+	})
 });

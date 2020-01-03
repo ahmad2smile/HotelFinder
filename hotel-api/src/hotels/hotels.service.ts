@@ -44,17 +44,17 @@ export class HotelsService {
 		const webSites = hotelDetails.contacts?.website;
 
 		const hotel: Hotel = {
-			id: item.id,
-			title: item.title,
+			id: item.href,
+			title: hotelDetails.name,
 			ratings: item.averageRating,
-			icon: item.icon,
-			openingHours: item.openingHours?.text,
+			icon: hotelDetails.icon,
+			openingHours: hotelDetails.extended?.openingHours?.text,
 			location: {
-				lat: item.position[0],
-				lng: item.position[1]
+				lat: hotelDetails.location?.position[0],
+				lng: hotelDetails.location?.position[1]
 			},
 			distance: item.distance,
-			address: hotelDetails.address,
+			address: hotelDetails.location?.address,
 			phone: phoneNumbers && phoneNumbers[0]?.value,
 			website: webSites && webSites[0]?.value,
 			images: hotelDetails.media.images.items

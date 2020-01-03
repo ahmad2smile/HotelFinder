@@ -13,4 +13,9 @@ export class HotelsController {
 
 		return this._hotelsService.findAll(location, query.search);
 	}
+
+	@Get("/hotel")
+	getById(@Query() query) {
+		return this._hotelsService.getHotel({ href: query.id });
+	}
 }

@@ -1,13 +1,9 @@
 import React from "react";
 
-import Dashboard from "./screens/Dashboard/Dashboard";
+import MainRoute from "./navigation/routes";
 
 const App = () => {
-	return (
-		<div>
-			<Dashboard />
-		</div>
-	);
+	return <MainRoute />;
 };
 
 export default App;
