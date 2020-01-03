@@ -6,6 +6,7 @@ const boxShadow =
 
 export const useStyles = createUseStyles({
 	container: {
+		cursor: "pointer",
 		minHeight: 120,
 		padding: 10,
 		transition: "transform .2s",

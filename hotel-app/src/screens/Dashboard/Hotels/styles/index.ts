@@ -4,7 +4,8 @@ export const useStyles = createUseStyles({
 	container: {
 		width: 360,
 		height: "100vh",
-		overflow: "scroll"
+		overflowY: "scroll",
+		overflowX: "hidden"
 	},
 	list: {
 		overflow: "hidden"
