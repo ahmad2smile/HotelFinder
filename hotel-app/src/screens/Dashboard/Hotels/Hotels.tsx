@@ -17,6 +17,7 @@ import Search from "./Search/Search";
 import { useStyles } from "./styles";
 import ResponsiveComponent from "../../../components/ResponsiveComponent/ResponsiveComponent";
 import Loader from "../../../components/Loader/Loader";
+import { useDebounce } from "./utils/debounceHook";
 
 interface IProps {
 	currentLocation: MapLocation;
@@ -24,10 +25,13 @@ interface IProps {
 
 const Hotels = ({ currentLocation }: IProps) => {
 	const classes = useStyles();
+
 	const [search, setSearch] = useState("");
+	const debouncedSearch = useDebounce(search, 500);
+
 	const [hotels, setHotels] = useState<Hotel[]>([]);
 	const [activeHotel, setActiveHotel] = useState<Hotel>();
-	const [error, setError] = useState<string>("");
+	const [error, setError] = useState<Error>();
 
 	const addHotelsMarkers = (_hotels: Hotel[]) => {
 		addIconMarker(
@@ -52,10 +56,10 @@ const Hotels = ({ currentLocation }: IProps) => {
 	}, [hotels]);
 
 	useEffect(() => {
-		getHotels(currentLocation, search)
+		getHotels(currentLocation, debouncedSearch)
 			.then(setHotels)
-			.catch(err => setError(err.message));
-	}, [currentLocation, search]);
+			.catch(setError);
+	}, [currentLocation, debouncedSearch]);
 
 	return (
 		<div className={classes.container}>
@@ -78,7 +82,7 @@ const Hotels = ({ currentLocation }: IProps) => {
 						/>
 					))
 				) : error ? (
-					<div>{error}</div>
+					<div>{error.message}</div>
 				) : (
 					<Loader />
 				)}
