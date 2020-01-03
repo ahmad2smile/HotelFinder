@@ -13,8 +13,12 @@ const Dashboard = () => {
 
 	return (
 		<div className={classes.container}>
-			<Hotels currentLocation={geoLocation}></Hotels>
-			<Map currentLocation={geoLocation}></Map>
+			<div className={classes.hotels}>
+				<Hotels currentLocation={geoLocation}></Hotels>
+			</div>
+			<div className={classes.map}>
+				<Map currentLocation={geoLocation}></Map>
+			</div>
 		</div>
 	);
 };
