@@ -6,8 +6,14 @@ import axios, { AxiosInstance } from "axios";
 @Injectable()
 export class HotelsService {
 	constructor() {
+		const devBaseURL = "https://places.sit.ls.hereapi.com";
+		const prodBaseURL = " 	https://places.ls.hereapi.com";
+
 		this._httpService = axios.create({
-			baseURL: "https://places.sit.ls.hereapi.com"
+			baseURL:
+				process.env.NODE_ENV === "development"
+					? devBaseURL
+					: prodBaseURL
 		});
 
 		this._httpService.interceptors.request.use(config => ({
