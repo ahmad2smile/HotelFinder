@@ -4,7 +4,7 @@ import { Hotel, MapLocation } from "shared";
 import { HotelIconStr } from "../../../components/Icons/HotelIcon";
 import HotelCard from "../../../components/HotelCard/HotelCard";
 
-import { getHotels } from "../../../services/dataService";
+import { getHotels, isRequestCanceled } from "../../../services/dataService";
 import {
 	addIconMarker,
 	focusOnLocation,
@@ -58,7 +58,7 @@ const Hotels = ({ currentLocation }: IProps) => {
 	useEffect(() => {
 		getHotels(currentLocation, debouncedSearch)
 			.then(setHotels)
-			.catch(setError);
+			.catch(isRequestCanceled(setError));
 	}, [currentLocation, debouncedSearch]);
 
 	return (
