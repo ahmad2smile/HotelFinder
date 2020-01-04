@@ -4,6 +4,8 @@ start-api:
 	cd hotel-api && npm run start
 start-api-dev:
 	cd hotel-api && npm run start:dev
+install:
+	cd hotel-api && npm i && cd ../hotel-app && npm i
 build-shared:
 	cd shared && npm i && npm run build
 build-app:
